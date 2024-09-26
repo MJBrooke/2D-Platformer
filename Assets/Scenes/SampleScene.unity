@@ -5284,6 +5284,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 836662185700374664, guid: bb3f7fc3a4a55434ea3d16583f7903c1, type: 3}
+      propertyPath: jumpInput.m_Name
+      value: Jump Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 836662185700374664, guid: bb3f7fc3a4a55434ea3d16583f7903c1, type: 3}
+      propertyPath: moveInput.m_Name
+      value: Move Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 836662185700374664, guid: bb3f7fc3a4a55434ea3d16583f7903c1, type: 3}
+      propertyPath: moveInput.m_SingletonActionBindings.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 836662185700374664, guid: bb3f7fc3a4a55434ea3d16583f7903c1, type: 3}
+      propertyPath: moveInput.m_SingletonActionBindings.Array.data[0].m_Id
+      value: fcf118d2-a019-4194-9b53-1e262fd91165
+      objectReference: {fileID: 0}
+    - target: {fileID: 836662185700374664, guid: bb3f7fc3a4a55434ea3d16583f7903c1, type: 3}
+      propertyPath: moveInput.m_SingletonActionBindings.Array.data[1].m_Id
+      value: 7c0ef69e-b30b-4490-964c-0453cae3cc9b
+      objectReference: {fileID: 0}
+    - target: {fileID: 836662185700374664, guid: bb3f7fc3a4a55434ea3d16583f7903c1, type: 3}
+      propertyPath: moveInput.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Move Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 836662185700374664, guid: bb3f7fc3a4a55434ea3d16583f7903c1, type: 3}
+      propertyPath: moveInput.m_SingletonActionBindings.Array.data[1].m_Action
+      value: Move Input
+      objectReference: {fileID: 0}
     - target: {fileID: 2350263302056646243, guid: bb3f7fc3a4a55434ea3d16583f7903c1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.45
