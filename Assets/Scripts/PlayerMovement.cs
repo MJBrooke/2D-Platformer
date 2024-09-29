@@ -4,6 +4,7 @@ using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private const float DefaultGravity = 7f;
     private static readonly int IsRunningParam = Animator.StringToHash("isRunning");
 
     [SerializeField] private Rigidbody2D rb;
@@ -12,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float movementSpeed = 5f;
     [SerializeField] private float jumpSpeed = 18f;
+    [SerializeField] private float climbSpeed = 5f;
 
     private Vector2 _moveInput;
 
@@ -23,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Run();
         FlipSprite();
+        ClimbLadder();
     }
 
     // This is invoked each time we input movement via the Input System.
@@ -61,5 +64,15 @@ public class PlayerMovement : MonoBehaviour
         // This means we can only jump off of the ground, rather than in midair.
         if (myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
             rb.velocity += new Vector2(0f, jumpSpeed);
+    }
+
+    private void ClimbLadder()
+    {
+        if (myCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
+        {
+            rb.gravityScale = 0f;
+            rb.velocity = new Vector2(rb.velocity.x, _moveInput.y * climbSpeed);
+        }
+        else rb.gravityScale = DefaultGravity;
     }
 }
