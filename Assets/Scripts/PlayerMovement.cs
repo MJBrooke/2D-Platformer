@@ -1,14 +1,17 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
     private static readonly int IsRunningParam = Animator.StringToHash("isRunning");
 
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator myAnimator;
+    [SerializeField] private Collider2D myCollider;
+
     [SerializeField] private float movementSpeed = 5f;
-    [SerializeField] private float jumpSpeed = 5f;
+    [SerializeField] private float jumpSpeed = 18f;
 
     private Vector2 _moveInput;
 
@@ -29,20 +32,20 @@ public class PlayerMovement : MonoBehaviour
         // We store this value into a field so that it can be used by other functions without passing this around as a parameter.
         _moveInput = value.Get<Vector2>();
     }
-    
+
     // It is not recommended to make float comparisons against 0, even though the Input System gives a 0 when not moving.
     // This function creates a 'safe' comparison by taking the positive value of the movement and comparing it to Epsilon, which is a tiny value.
     // This overcomes floating-point inaccuracies.
     private bool IsRunning() => Mathf.Abs(_moveInput.x) > Mathf.Epsilon;
-    
+
     private void Run()
     {
         // We set the x-value to our movement speed. If input is non-zero, this creates horizontal movement.
         // We set the y-value to the existing value of the RigidBody so that we don't override gravity.
         rb.velocity = new Vector2(_moveInput.x * movementSpeed, rb.velocity.y);
-        
+
         // Set the animator's isRunning parameter so that the AnimationController knows to shift from PlayerIdling to PlayerRunning and back.
-        animator.SetBool(IsRunningParam, IsRunning());
+        myAnimator.SetBool(IsRunningParam, IsRunning());
     }
 
     private void FlipSprite()
@@ -54,8 +57,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJump(InputValue value)
     {
-        // if (!value.isPressed) return;
-        
-        if (value.isPressed) rb.velocity += new Vector2(0f, jumpSpeed);
+        // We check if the Player's collider is touching anything designated with the 'Ground' layer.
+        // This means we can only jump off of the ground, rather than in midair.
+        if (myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+            rb.velocity += new Vector2(0f, jumpSpeed);
     }
 }
