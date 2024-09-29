@@ -8,9 +8,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
     [SerializeField] private float movementSpeed = 5f;
+    [SerializeField] private float jumpSpeed = 5f;
 
     private Vector2 _moveInput;
-    private bool _jumpInput;
 
     private void Start()
     {
@@ -54,7 +54,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJump(InputValue value)
     {
-        _jumpInput = value.Get<float>() > 0f;
-        Debug.Log("Jump: " + _jumpInput);
+        // if (!value.isPressed) return;
+        
+        if (value.isPressed) rb.velocity += new Vector2(0f, jumpSpeed);
     }
 }
