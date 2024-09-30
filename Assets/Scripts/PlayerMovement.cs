@@ -1,25 +1,27 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
     private static readonly int IsRunningParam = Animator.StringToHash("isRunning");
     private static readonly int IsClimbingParam = Animator.StringToHash("isClimbing");
+
     private const float DefaultGravity = 7f;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator myAnimator;
-    [SerializeField] private Collider2D myCollider;
+    [SerializeField] private CapsuleCollider2D myCollider;
 
     [SerializeField] private float movementSpeed = 5f;
     [SerializeField] private float jumpSpeed = 18f;
     [SerializeField] private float climbSpeed = 5f;
 
     private Vector2 _moveInput;
+    private int groundLayerMask;
 
     private void Start()
     {
+        groundLayerMask = LayerMask.GetMask("Ground");
     }
 
     private void Update()
@@ -58,9 +60,17 @@ public class PlayerMovement : MonoBehaviour
     {
         // We check if the Player's collider is touching anything designated with the 'Ground' layer.
         // This means we can only jump off of the ground, rather than in midair.
-        if (myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if (myCollider.IsTouchingLayers(groundLayerMask) && IsGrounded())
             rb.velocity += new Vector2(0f, jumpSpeed);
     }
+
+    // We shoot a line from the bottom of the Player's position (the origin) downwards for 1 Unity unit of length, interacting only with the Ground layer.
+    // If any collision is found, an implicit conversion to a bool will return true, else false
+    private bool IsGrounded() => Physics2D.Raycast(
+        origin: transform.position + Vector3.down * 0.5f,
+        direction: Vector2.down,
+        distance: 1f,
+        groundLayerMask);
 
     private void ClimbLadder()
     {
@@ -68,7 +78,8 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.gravityScale = 0f; // Prevent player from 'sinking' on the ladder if not moving
             rb.velocity = new Vector2(rb.velocity.x, _moveInput.y * climbSpeed);
-            myAnimator.SetBool(IsClimbingParam, IsMovingOnAxis(_moveInput.y)); // Only play animation if we're on the ladder and moving
+            myAnimator.SetBool(IsClimbingParam,
+                IsMovingOnAxis(_moveInput.y)); // Only play animation if we're on the ladder and moving
         }
         else
         {
@@ -76,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
             myAnimator.SetBool(IsClimbingParam, false);
         }
     }
-    
+
     // It is not recommended to make float comparisons against 0, even though the Input System gives a 0 when not moving.
     // This function creates a 'safe' comparison by taking the positive value of the movement and comparing it to Epsilon, which is a tiny value.
     // This overcomes floating-point inaccuracies.
