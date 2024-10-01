@@ -17,11 +17,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float climbSpeed = 5f;
 
     private Vector2 _moveInput;
-    private int groundLayerMask;
+    private int _groundLayerMask;
 
     private void Start()
     {
-        groundLayerMask = LayerMask.GetMask("Ground");
+        _groundLayerMask = LayerMask.GetMask("Ground");
     }
 
     private void Update()
@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // We check if the Player's collider is touching anything designated with the 'Ground' layer.
         // This means we can only jump off of the ground, rather than in midair.
-        if (myCollider.IsTouchingLayers(groundLayerMask) && IsGrounded())
+        if (myCollider.IsTouchingLayers(_groundLayerMask) && IsGrounded())
             rb.velocity += new Vector2(0f, jumpSpeed);
     }
 
@@ -70,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
         origin: transform.position + Vector3.down * 0.5f,
         direction: Vector2.down,
         distance: 1f,
-        groundLayerMask);
+        _groundLayerMask);
 
     private void ClimbLadder()
     {
