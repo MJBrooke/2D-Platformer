@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private static readonly int IsRunningParam = Animator.StringToHash("isRunning");
     private static readonly int IsClimbingParam = Animator.StringToHash("isClimbing");
+    private static readonly int IsDeadParam = Animator.StringToHash("isDead");
 
     private const float DefaultGravity = 7f;
 
@@ -101,6 +102,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Die()
     {
-        if (myCollider.IsTouchingLayers(_enemyLayerMask)) _isAlive = false;
+        if (!myCollider.IsTouchingLayers(_enemyLayerMask)) return;
+        
+        _isAlive = false;
+        rb.AddForce(new Vector2(0f, 20f), ForceMode2D.Impulse);
+        rb.sharedMaterial = null; // Remove Slip material to stop infinite movement
+        myAnimator.SetTrigger(IsDeadParam);
     }
 }
