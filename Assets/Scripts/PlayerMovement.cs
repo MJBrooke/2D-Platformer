@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,25 +19,30 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 _moveInput;
     private int _groundLayerMask;
+    private int _enemyLayerMask;
+    private bool _isAlive = true;
 
     private void Start()
     {
         _groundLayerMask = LayerMask.GetMask("Ground");
+        _enemyLayerMask = LayerMask.GetMask("Enemy");
     }
 
     private void Update()
     {
+        if (!_isAlive) return;
+        
         Run();
         FlipSprite();
         ClimbLadder();
+        Die();
     }
 
     // This is invoked each time we input movement via the Input System.
     // We get a Vector2 type with the x and y value, between 0 and 1 inclusive.
     private void OnMove(InputValue value)
     {
-        // We store this value into a field so that it can be used by other functions without passing this around as a parameter.
-        _moveInput = value.Get<Vector2>();
+        _moveInput = _isAlive ? value.Get<Vector2>() : Vector2.zero;
     }
 
     private void Run()
@@ -92,4 +98,9 @@ public class PlayerMovement : MonoBehaviour
     // This function creates a 'safe' comparison by taking the positive value of the movement and comparing it to Epsilon, which is a tiny value.
     // This overcomes floating-point inaccuracies.
     private static bool IsMovingOnAxis(float value) => Mathf.Abs(value) > Mathf.Epsilon;
+
+    private void Die()
+    {
+        if (myCollider.IsTouchingLayers(_enemyLayerMask)) _isAlive = false;
+    }
 }
