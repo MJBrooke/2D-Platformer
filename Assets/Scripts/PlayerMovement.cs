@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator myAnimator;
     [SerializeField] private CapsuleCollider2D myCollider;
+    [SerializeField] private GameObject gun;
+    [SerializeField] private GameObject bullet;
 
     [SerializeField] private float movementSpeed = 5f;
     [SerializeField] private float jumpSpeed = 18f;
@@ -20,19 +23,19 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 _moveInput;
     private int _groundLayerMask;
-    private int _enemyLayerMask;
     private bool _isAlive = true;
+    private int _direction = 1;
 
     private void Start()
     {
         _groundLayerMask = LayerMask.GetMask("Ground");
-        _enemyLayerMask = LayerMask.GetMask("Enemy");
     }
 
     private void Update()
     {
         if (!_isAlive) return;
-        
+
+        Direction();
         Run();
         FlipSprite();
         ClimbLadder();
@@ -56,12 +59,14 @@ public class PlayerMovement : MonoBehaviour
         myAnimator.SetBool(IsRunningParam, IsMovingOnAxis(_moveInput.x));
     }
 
-    private void FlipSprite()
+    // We could technically refer to transform.localScale.x to get the direction elsewhere after running FlipSprite().
+    // However, using a named variable makes the rest of the code more readable.
+    private void Direction()
     {
-        // If moving (i.e. input.x != 0), use the Scale.x value of the Transform component as either -1 or 1 to flip the direction
-        if (IsMovingOnAxis(_moveInput.x))
-            transform.localScale = new Vector2(Mathf.Sign(_moveInput.x), transform.localScale.y);
+        if (IsMovingOnAxis(_moveInput.x)) _direction = (int)Mathf.Sign(_moveInput.x);
     }
+
+    private void FlipSprite() => transform.localScale = new Vector2(_direction, transform.localScale.y);
 
     private void OnJump(InputValue value)
     {
@@ -100,12 +105,20 @@ public class PlayerMovement : MonoBehaviour
     // This overcomes floating-point inaccuracies.
     private static bool IsMovingOnAxis(float value) => Mathf.Abs(value) > Mathf.Epsilon;
 
+    private void OnFire()
+    {
+        if (!_isAlive) return;
+
+        var bulletInstance = Instantiate(bullet, gun.transform.position, Quaternion.identity);
+        bulletInstance.GetComponent<Rigidbody2D>().AddForce(new Vector2(_direction * 20f, 0f), ForceMode2D.Impulse);
+    }
+
     private void Die()
     {
         if (!myCollider.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards"))) return;
-        
+
         _isAlive = false;
-        rb.AddForce(new Vector2(0f, 20f), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(-_direction * 20f, 20f), ForceMode2D.Impulse);
         rb.sharedMaterial = null; // Remove Slip material to stop infinite movement
         myAnimator.SetTrigger(IsDeadParam);
     }
