@@ -102,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Die()
     {
-        if (!myCollider.IsTouchingLayers(_enemyLayerMask)) return;
+        if (!myCollider.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazards"))) return;
         
         _isAlive = false;
         rb.AddForce(new Vector2(0f, 20f), ForceMode2D.Impulse);
