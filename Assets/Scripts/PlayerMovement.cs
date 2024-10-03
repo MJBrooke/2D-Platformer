@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -119,5 +120,13 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(new Vector2(-_direction * 20f, 20f), ForceMode2D.Impulse);
         rb.sharedMaterial = null; // Remove Slip material to stop infinite movement
         myAnimator.SetTrigger(IsDeadParam);
+        
+        // TODO - hide the reload behind some kind of screen-clear animation
+        Invoke(nameof(ReloadScene), 3f);
+    }
+    
+    private void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
