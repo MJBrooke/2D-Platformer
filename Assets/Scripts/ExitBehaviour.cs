@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,11 +12,12 @@ public class ExitBehaviour : MonoBehaviour
 
         // TODO - add some sound
         exitParticles.Play();
-        Invoke(nameof(LoadNextScene), 1f);
+        StartCoroutine(LoadNextScene());
     }
 
-    private void LoadNextScene()
+    private static IEnumerator LoadNextScene()
     {
+        yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }
