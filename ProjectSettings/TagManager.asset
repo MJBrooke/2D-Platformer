@@ -20,7 +20,7 @@ TagManager:
   - Hazards
   - Bullets
   - Bouncing
-  - 
+  - Collectibles
   - 
   - 
   - 
@@ -60,11 +60,14 @@ TagManager:
   - name: Hazards
     uniqueID: 912429461
     locked: 0
-  - name: Enemies
-    uniqueID: 1595463935
-    locked: 0
   - name: Exit
     uniqueID: 1440176759
+    locked: 0
+  - name: Coins
+    uniqueID: 3378417285
+    locked: 0
+  - name: Enemies
+    uniqueID: 1595463935
     locked: 0
   - name: Player
     uniqueID: 2015980787
