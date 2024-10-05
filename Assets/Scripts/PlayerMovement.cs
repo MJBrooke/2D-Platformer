@@ -121,12 +121,11 @@ public class PlayerMovement : MonoBehaviour
         rb.sharedMaterial = null; // Remove Slip material to stop infinite movement
         myAnimator.SetTrigger(IsDeadParam);
         
-        // TODO - hide the reload behind some kind of screen-clear animation
-        Invoke(nameof(ReloadScene), 3f);
+        Invoke(nameof(GameManager_OnPlayerDeath), 3f);
     }
-    
-    private void ReloadScene()
+
+    private void GameManager_OnPlayerDeath()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        GameManager.Instance.ProcessPlayerDeath();
     }
 }
