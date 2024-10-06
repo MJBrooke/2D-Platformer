@@ -16,6 +16,8 @@ using System.Collections;
  *   - Fuller TileMap for platforming
  *   - Use Finite State Machine for Player status
  *   - Extra life on 1k points
+ *   - Enemies that can shoot at you
+ *   - Enemies that can navigate to you via pathfinding
  *
  * Fixes:
  *   - Fix climbing animation when using controller
