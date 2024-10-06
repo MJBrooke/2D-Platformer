@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Creates a Singleton object with a static Instance variable of itself that may be accessed from anywhere.
 public abstract class PersistentSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     public static T Instance { get; private set; }
