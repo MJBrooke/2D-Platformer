@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -120,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(new Vector2(-_direction * 20f, 20f), ForceMode2D.Impulse);
         rb.sharedMaterial = null; // Remove Slip material to stop infinite movement
         myAnimator.SetTrigger(IsDeadParam);
-        
+
         GameManager.Instance.ProcessPlayerDeath();
     }
 }

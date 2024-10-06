@@ -1,7 +1,7 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 /*
  * Things to add for learning:
@@ -15,6 +15,7 @@ using UnityEngine.SceneManagement;
  *   - Quality movement
  *   - Fuller TileMap for platforming
  *   - Use Finite State Machine for Player status
+ *   - Extra life on 1k points
  *
  * Fixes:
  *   - Fix climbing animation when using controller
@@ -38,6 +39,15 @@ public class GameManager : PersistentSingleton<GameManager>
         scoreText.text = _score.ToString();
     }
 
+    public void LoadNextScene() => StartCoroutine(LoadNextSceneAsync());
+
+    private static IEnumerator LoadNextSceneAsync()
+    {
+        yield return new WaitForSeconds(1f);
+        ScenePersist.Instance.ResetScene();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
     public void ProcessPlayerDeath() => StartCoroutine(playerLives > 1 ? SoftDeath() : HardDeath());
 
     public void AddScore(int points = 100)
@@ -45,7 +55,7 @@ public class GameManager : PersistentSingleton<GameManager>
         _score += points;
         scoreText.text = _score.ToString();
     }
-    
+
     private IEnumerator SoftDeath()
     {
         playerLives--;
@@ -58,6 +68,7 @@ public class GameManager : PersistentSingleton<GameManager>
     {
         livesText.text = "(×_×)";
         yield return new WaitForSeconds(OnDeathWaitSeconds);
+        ScenePersist.Instance.ResetScene();
         SceneManager.LoadScene("Scene 1");
         Destroy(gameObject); // This allows the GameManager to be recreated with initial values on SceneLoad
     }
