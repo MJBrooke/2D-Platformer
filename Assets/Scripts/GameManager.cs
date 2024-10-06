@@ -12,6 +12,12 @@ using UnityEngine.SceneManagement;
  *   - Start and pause menus
  *     - Persistent settings
  *   - Save/Load game
+ *   - Quality movement
+ *   - Fuller TileMap for platforming
+ *   - Use Finite State Machine for Player status
+ *
+ * Fixes:
+ *   - Fix climbing animation when using controller
  */
 
 public class GameManager : MonoBehaviour
