@@ -3,6 +3,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+ * Things to add for learning:
+ *   - Smooth Scene transitions
+ *   - Music and audio
+ *   - Shooting animation with bow
+ *   - Event-driven actions
+ *   - Start and pause menus
+ *     - Persistent settings
+ *   - Save/Load game
+ */
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
@@ -11,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private int playerLives = 3;
 
+    // TODO - move these to their own components listening to events
     [SerializeField] private TextMeshProUGUI livesText;
     [SerializeField] private TextMeshProUGUI scoreText;
 
