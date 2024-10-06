@@ -1,13 +1,18 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// TODO - add some GameStates to this
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    
-    // TODO - show this life-count on the UI
+
+    private const float OnDeathWaitSeconds = 3f;
+
     [SerializeField] private int playerLives = 3;
+
+    [SerializeField] private TextMeshProUGUI livesText;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
     private void Awake()
     {
@@ -16,25 +21,30 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
-    public void ProcessPlayerDeath()
+    private void Start()
     {
-        if (playerLives > 1) SoftDeath();
-        else HardDeath();
+        livesText.text = playerLives.ToString();
     }
 
-    private void SoftDeath()
+    public void ProcessPlayerDeath() => StartCoroutine(playerLives > 1 ? SoftDeath() : HardDeath());
+
+    private IEnumerator SoftDeath()
     {
         playerLives--;
+        livesText.text = playerLives.ToString();
+        yield return new WaitForSeconds(OnDeathWaitSeconds);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-    
-    private void HardDeath()
+
+    private IEnumerator HardDeath()
     {
+        livesText.text = "(×_×)";
+        yield return new WaitForSeconds(OnDeathWaitSeconds);
         SceneManager.LoadScene("Scene 1");
         Destroy(gameObject); // This allows the GameManager to be recreated with initial values on SceneLoad
     }

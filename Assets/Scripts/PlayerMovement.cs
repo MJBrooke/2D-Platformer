@@ -121,11 +121,6 @@ public class PlayerMovement : MonoBehaviour
         rb.sharedMaterial = null; // Remove Slip material to stop infinite movement
         myAnimator.SetTrigger(IsDeadParam);
         
-        Invoke(nameof(GameManager_OnPlayerDeath), 3f);
-    }
-
-    private void GameManager_OnPlayerDeath()
-    {
         GameManager.Instance.ProcessPlayerDeath();
     }
 }
