@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI livesText;
     [SerializeField] private TextMeshProUGUI scoreText;
 
+    private int _score;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -29,10 +31,17 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         livesText.text = playerLives.ToString();
+        scoreText.text = _score.ToString();
     }
 
     public void ProcessPlayerDeath() => StartCoroutine(playerLives > 1 ? SoftDeath() : HardDeath());
 
+    public void AddScore(int points = 100)
+    {
+        _score += points;
+        scoreText.text = _score.ToString();
+    }
+    
     private IEnumerator SoftDeath()
     {
         playerLives--;
