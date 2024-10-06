@@ -20,10 +20,8 @@ using UnityEngine.SceneManagement;
  *   - Fix climbing animation when using controller
  */
 
-public class GameManager : MonoBehaviour
+public class GameManager : PersistentSingleton<GameManager>
 {
-    public static GameManager Instance;
-
     private const float OnDeathWaitSeconds = 3f;
 
     [SerializeField] private int playerLives = 3;
@@ -33,18 +31,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
 
     private int _score;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
 
     private void Start()
     {
