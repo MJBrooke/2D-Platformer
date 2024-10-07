@@ -4,7 +4,7 @@ Game made as part of the [Complete C# Unity Game Developer 2D](https://www.udemy
 
 Features a 2D-Platformer with running, jumping, shooting, enemies, obstacles and collectibles!
 
-![2D Platformer.png](2D Platformer.png)
+![2DPlatformer.png](2DPlatformer.png)
 
 Controls:
 - Movement (WASD/Arrows)
