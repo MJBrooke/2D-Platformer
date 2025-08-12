@@ -1,4 +1,4 @@
-# Snow Boarder
+# 2D Platformer
 
 Game made as part of the [Complete C# Unity Game Developer 2D](https://www.udemy.com/course/unitycourse/?couponCode=24T4MT90924B) tutorial series.
 
